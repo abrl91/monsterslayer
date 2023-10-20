@@ -1,1 +1,1 @@
-# go-game
+# go-game: monster slayer
