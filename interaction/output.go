@@ -3,6 +3,9 @@ package interaction
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+
+	"github.com/common-nighthawk/go-figure"
 )
 
 type RoundData struct {
@@ -15,6 +18,7 @@ type RoundData struct {
 }
 
 func PrintGreetings() {
+	figure.NewFigure("MONSTER SLAYER", "", true).Print()
 	fmt.Println("MONSTER SLAYER")
 	fmt.Println("Starting a new game...")
 	fmt.Println("Good luck!")
@@ -51,14 +55,23 @@ func PrintRoundStatistics(roundData *RoundData) {
 
 func DeclareWinner(winner string) {
 	fmt.Println("--------------------------")
-	fmt.Println("GAME OVER")
+	figure.NewColorFigure("GAME OVER!", "", "red", true).Print()
 	fmt.Println("--------------------------")
-	fmt.Printf("%v won!\n", winner)
+	figure.NewColorFigure(winner+" "+"won", "", "green", true).Print()
 }
 
 func WriteLogFile(roundData *[]RoundData) {
 	fmt.Println("Writing log file...")
-	file, err := os.Create("gamelog.txt")
+	exFullPath, err := os.Executable()
+
+	if err != nil {
+		fmt.Println("Writing log file failed. Exiting...")
+		return
+	}
+
+	exDirPath := filepath.Dir(exFullPath)
+
+	file, err := os.Create(exDirPath + "/gamelog.txt")
 
 	if err != nil {
 		fmt.Println("Error creating log file")
